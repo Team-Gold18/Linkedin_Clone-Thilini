@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 
-function Rightside() {
+const Rightside = (props) => {
   return (
     <Container>
       <FollowCard>
@@ -9,6 +8,7 @@ function Rightside() {
           <h2>Add to your feed</h2>
           <img src="/images/feed-icon.svg" alt="" />
         </Title>
+
         <FeedList>
           <li>
             <a>
@@ -29,6 +29,7 @@ function Rightside() {
             </div>
           </li>
         </FeedList>
+
         <Recommendation>
           View all recommendations
           <img src="/images/right-icon.svg" alt="" />
@@ -42,9 +43,7 @@ function Rightside() {
       </BannerCard>
     </Container>
   );
-}
-
-export default Rightside;
+};
 
 const Container = styled.div`
   grid-area: rightside;
@@ -83,6 +82,7 @@ const FeedList = styled.ul`
       display: flex;
       flex-direction: column;
     }
+
     button {
       background-color: transparent;
       color: rgba(0, 0, 0, 0.6);
@@ -125,3 +125,5 @@ const BannerCard = styled(FollowCard)`
     height: 100%;
   }
 `;
+
+export default Rightside;

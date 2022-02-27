@@ -2,10 +2,13 @@ import styled from "styled-components";
 import Leftside from "./Leftside";
 import Main from "./Main";
 import Rightside from "./Rightside";
+import { connect } from "react-redux";
+import { Redirect } from "react-router";
 
 const Home = (props) => {
   return (
     <Container>
+      {!props.user && <Redirect to="/" />}
       <Section>
         <h5>
           <a>Hiring in a hurry? - </a>
@@ -50,11 +53,13 @@ const Section = styled.section`
       font-weight: 700;
     }
   }
+
   p {
     font-size: 14px;
     color: #434649;
     font-weight: 600;
   }
+
   @media (max-width: 768px) {
     flex-direction: column;
     padding: 0 5px;
@@ -63,7 +68,7 @@ const Section = styled.section`
 
 const Layout = styled.div`
   display: grid;
-  grid-template-areas: "leftside main rightside";   //areas names
+  grid-template-areas: "leftside main rightside";
   grid-template-columns: minmax(0, 5fr) minmax(0, 12fr) minmax(300px, 7fr);
   column-gap: 25px;
   row-gap: 25px;
@@ -76,4 +81,10 @@ const Layout = styled.div`
   }
 `;
 
-export default Home;
+const mapStateToProps = (state) => {
+	return {
+		user: state.userState.user,
+	};
+};
+
+export default connect(mapStateToProps)(Home);

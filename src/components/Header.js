@@ -1,13 +1,14 @@
-import React from 'react'
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { signOutAPI } from "../actions";
 
-function Header(props) {
+const Header = (props) => {
   return (
     <Container>
       <Content>
         <Logo>
           <a href="/home">
-            <img src="/images/home-logo.svg" alt="home" />
+            <img src="/images/home-logo.svg" alt="" />
           </a>
         </Logo>
         <Search>
@@ -57,12 +58,18 @@ function Header(props) {
 
             <User>
               <a>
-                <img src="/images/user.svg" alt="" />
-                <span>Me</span>
-                <img src="/images/down-icon.svg" alt="" />
+              {props.user && props.user.photoURL ? (
+              <img src={props.user.photoURL} alt="" /> 
+              ): (
+              <img src="/images/user.svg" alt="" />
+              )}
+                <span>
+									Me 
+                  <img src="/images/down-icon.svg" alt="" />
+								</span>
               </a>
 
-              <SignOut>
+              <SignOut onClick={() => props.signOut()}>
                 <a>Sign Out</a>
               </SignOut>
             </User>
@@ -81,10 +88,7 @@ function Header(props) {
       </Content>
     </Container>
   );
-}
-
-export default Header
-
+};
 
 const Container = styled.div`
   background-color: white;
@@ -114,7 +118,6 @@ const Search = styled.div`
   opacity: 1;
   flex-grow: 1;
   position: relative;
-
   & > div {
     max-width: 280px;
     input {
@@ -138,7 +141,7 @@ const Search = styled.div`
 const SearchIcon = styled.div`
   width: 40px;
   position: absolute;
-  z-index: 1; // inside the search  input
+  z-index: 1;
   top: 10px;
   left: 2px;
   border-radius: 0 2px 2px 0;
@@ -154,8 +157,8 @@ const Nav = styled.nav`
   display: block;
   @media (max-width: 768px) {
     position: fixed;
-    left: 0; // left pththata ynwa
-    bottom: 0; //yatata ynwa
+    left: 0;
+    bottom: 0;
     background: white;
     width: 100%;
   }
@@ -163,8 +166,9 @@ const Nav = styled.nav`
 
 const NavListWrap = styled.ul`
   display: flex;
-  flex-wrap: nowrap; // row ekk widiyta enne
+  flex-wrap: nowrap;
   list-style-type: none;
+
   .active {
     span:after {
       content: "";
@@ -196,15 +200,18 @@ const NavList = styled.li`
     min-width: 80px;
     position: relative;
     text-decoration: none;
+
     span {
       color: rgba(0, 0, 0, 0.6);
       display: flex;
       align-items: center;
     }
+
     @media (max-width: 768px) {
       min-width: 70px;
     }
   }
+
   &:hover,
   &:active {
     a {
@@ -226,7 +233,6 @@ const SignOut = styled.div`
   transition-duration: 167ms;
   text-align: center;
   display: none;
-  
 `;
 
 const User = styled(NavList)`
@@ -234,21 +240,23 @@ const User = styled(NavList)`
     width: 24px;
     border-radius: 50%;
   }
+
   a > img {
     width: 24px;
     height: 24px;
     border-radius: 50%;
   }
+
   span {
     display: flex;
     align-items: center;
   }
+
   &:hover {
     ${SignOut} {
       align-items: center;
       display: flex;
       justify-content: center;
-      color: #0a66c2;
     }
   }
 `;
@@ -256,3 +264,15 @@ const User = styled(NavList)`
 const Work = styled(User)`
   border-left: 1px solid rgba(0, 0, 0, 0.08);
 `;
+
+const mapStateToProps = (state) => {
+	return {
+		user: state.userState.user,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => ({
+	signOut: () => dispatch(signOutAPI()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -1,10 +1,12 @@
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { signInAPI } from "../actions";
+import { Redirect } from "react-router";
 
-import React from 'react'
-
-function Login(props) {
+const Login = (props) => {
   return (
     <Container>
+      {props.user && <Redirect to="/home" />}
       <Nav>
         <a href="/">
           <img src="/images/login-logo.svg" alt="" />
@@ -20,7 +22,7 @@ function Login(props) {
           <img src="/images/login-hero.svg" alt="" />
         </Hero>
         <Form>
-          <Google>
+          <Google onClick={() => props.signIn()}>
             <img src="/images/google.svg" alt="" />
             Sign in with Google
           </Google>
@@ -28,9 +30,7 @@ function Login(props) {
       </Section>
     </Container>
   );
-}
-
-export default Login
+};
 
 const Container = styled.div`
   padding: 0px;
@@ -44,9 +44,8 @@ const Nav = styled.nav`
   align-items: center;
   position: relative;
   justify-content: space-between;
-  flex-wrap: nowrap; // wena line ekakta ynne na. ekama line eke thiyenwa
+  flex-wrap: nowrap;
 
-//   any thing in a tag
   & > a {
     width: 135px;
     height: 34px;
@@ -101,6 +100,7 @@ const Section = styled.section`
   max-width: 1128px;
   align-items: center;
   margin: auto;
+
   @media (max-width: 768px) {
     margin: auto;
     min-height: 0px;
@@ -123,6 +123,7 @@ const Hero = styled.div`
       line-height: 2;
     }
   }
+
   img {
     /* z-index: -1; */
     width: 700px;
@@ -157,6 +158,7 @@ const Google = styled.button`
   border-radius: 28px;
   box-shadow: inset 0 0 0 1px rgb(0 0 0 / 60%),
     inset 0 0 0 2px rgb(0 0 0 / 0%) inset 0 0 0 1px rgb(0 0 0 / 0);
+
   vertical-align: middle;
   z-index: 0;
   transition-duration: 167ms;
@@ -167,3 +169,15 @@ const Google = styled.button`
     color: rgba(0, 0, 0, 0.75);
   }
 `;
+
+const mapStateToProps = (state) => {
+	return {
+		user: state.userState.user,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => ({
+	signIn: () => dispatch(signInAPI()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
